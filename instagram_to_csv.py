@@ -11,7 +11,7 @@ import subprocess
 # --- CONFIGURATION ---
 USERNAME = "venuekent"
 PASSWORD = "Venue2023/24"  # Keep blank or use env var
-REPO_PATH = "C:/Users/ayuba/Repository/instagram_data"
+REPO_PATH = "C:/Users/ayuba/Repository/instagram-thumbnails"
 CSV_PATH = os.path.join(REPO_PATH, "instagram_metrics.csv")
 THUMBNAIL_DIR = os.path.join(REPO_PATH, "thumbnails")
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/ashraf-KSU/instagram-thumbnails/main/thumbnails/"  # UPDATE with actual repo name
@@ -108,14 +108,15 @@ for media in recent_medias:
 os.makedirs(THUMBNAIL_DIR, exist_ok=True)
 local_paths = []
 for row in data:
-    url = str(row.get("Thumbnail", ""))
-    if not url.startswith("http"):
+    url = row["Thumbnail"]
+
+    if not url or not str(url).startswith("http"):
         row["Thumbnail Local Path"] = ""
         continue
 
+    url_str = str(url)  # define only after it’s verified
 
-
-    filename = os.path.basename(urlparse(url).path)
+    filename = os.path.basename(urlparse(url_str).path)
     local_path = os.path.join(THUMBNAIL_DIR, filename)
 
     try:
